@@ -22,13 +22,15 @@
 #include "Game.h"
 #include "SpriteCodex.h"
 
+
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
 	menu( { gfx.GetRect().GetCenter().x,200 } ),
-	field( gfx.GetRect().GetCenter(),4 )
+	field()
 {
+
 }
 
 void Game::Go()
@@ -65,19 +67,41 @@ void Game::UpdateModel()
 					}
 				}
 			}
+			else{
+				if (e.GetType() == Mouse::Event::Type::LPress)
+				{
+					field.FreeResource();
+					state = State::SelectionMenu;
+					// new field object
+				}
+			}
 		}
 		else
 		{
 			const SelectionMenu::Size s = menu.ProcessMouse( e );
 			switch( s )
 			{
-			case SelectionMenu::Size::Small:
-			case SelectionMenu::Size::Medium:
-			case SelectionMenu::Size::Large:
+			case SelectionMenu::Size::Small: 
+				// construct a small memefield	
+				CreateField(8, 4, 5);
 				state = State::Memesweeper;
+				break;
+			case SelectionMenu::Size::Medium: 
+				CreateField(14, 7, 15);
+				state = State::Memesweeper;
+				break;
+			case SelectionMenu::Size::Large: 
+				CreateField(24, 16, 45);
+				state = State::Memesweeper;
+				break;
 			}
 		}
 	}
+}
+
+void Game::CreateField(int width, int height, int nMemes)
+{
+	field = MemeField(gfx.GetRect().GetCenter(), width, height, nMemes);
 }
 
 void Game::ComposeFrame()

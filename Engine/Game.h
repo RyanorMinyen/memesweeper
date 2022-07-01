@@ -44,14 +44,15 @@ private:
 	void UpdateModel();
 	/********************************/
 	/*  User Functions              */
+	void CreateField(int width, int height, int nMemes);
 	/********************************/
 private:
 	MainWindow& wnd;
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
-	MemeField field;
 	SelectionMenu menu;
 	State state = State::SelectionMenu;
+	MemeField field;
 	/********************************/
 };

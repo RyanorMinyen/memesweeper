@@ -38,12 +38,16 @@ private:
 		int nNeighborMemes = -1;
 	};
 public:
-	MemeField( const Vei2& center,int nMemes );
+	MemeField() = default;
+	MemeField( const Vei2& center, int width_in, int height_in, int nMemes);
 	void Draw( Graphics& gfx ) const;
 	RectI GetRect() const;
 	void OnRevealClick( const Vei2& screenPos );
 	void OnFlagClick( const Vei2& screenPos );
 	State GetState() const;
+	void FreeResource();
+
+
 private:
 	void RevealTile( const Vei2& gridPos );
 	Tile& TileAt( const Vei2& gridPos );
@@ -51,13 +55,16 @@ private:
 	Vei2 ScreenToGrid( const Vei2& screenPos );
 	int CountNeighborMemes( const Vei2& gridPos );
 	bool GameIsWon() const;
+
 private:
-	static constexpr int width = 8;
-	static constexpr int height = 6;
+	int width; // change this
+	int height; // change this
 	static constexpr int borderThickness = 10;
 	static constexpr Color borderColor = Colors::Blue;
 	Sound sndLose = Sound( L"spayed.wav" );
 	Vei2 topLeft;
 	State state = State::Memeing;
-	Tile field[width * height];
+	int numTiles = width * height;
+	Tile* field = nullptr;// you problem will be obvious when you debug, so set it to nullptr
+						  // this is important to free this after deleting memefield in game.cpp
 };
